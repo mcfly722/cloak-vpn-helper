@@ -1,11 +1,15 @@
 var params = {
     fakehost: '',
-    fakeport: ''
+    cloakEncryptionMethod: '',
+    cloakNumberOfConnections: ''
 }
 
 function fill(){
     for (let key in params) {
-        params[key]=document.getElementById(key).value
+        element=document.getElementById(key)
+        if (element) {
+            params[key]=element.value
+        }
     }
 }
 
@@ -40,11 +44,11 @@ sudo tee /etc/cloak/cloak-client.json << EOF
 {
     "Transport": "direct",
     "ProxyMethod": "wireguard",
-    "EncryptionMethod": "aes-128-gcm",
+    "EncryptionMethod": ":cloakEncryptionMethod",
     "UID": "$ck_uid",
     "PublicKey": "$ck_publicKey",
     "ServerName": ":fakehost",
-    "NumConn": 30,
+    "NumConn": :cloakNumberOfConnections,
     "KeepAlive": 0,
     "BrowserSig": "chrome",
     "StreamTimeout": 300
