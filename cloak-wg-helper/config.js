@@ -1,13 +1,28 @@
 var params = {
-    state: 'Alabama',
-    name: 'Arun'
+    fakehost: '',
+    fakeport: ''
 }
-  
-function subst(string, data) {
-    return string.replace(/:([a-zA-Z]+)/g, (m, i) => i in data ? data[i] : m)
+
+function fill(){
+    for (let key in params) {
+        params[key]=document.getElementById(key).value
     }
+}
+
+function subst(string, data) {
+    return string.replace(/:([a-zA-Z]+)/g, (m, i) => i in data ? "<b style='background-color:powderblue;' id='"+i+"_'>"+data[i]+"</b>" : m)
+}
+
+function onChange(key, value){
+    params[key]=value
+    var elms = document.querySelectorAll("[id='"+key+"_']")
+    Array.from(elms, element => {
+        element.innerText=value
+    });
+}
 
 function update(){
+
     let client = `
 <h3>1. Local Gateway</h3>
   
@@ -28,7 +43,7 @@ sudo tee /etc/cloak/cloak-client.json << EOF
     "EncryptionMethod": "aes-128-gcm",
     "UID": "$ck_uid",
     "PublicKey": "$ck_publicKey",
-    "ServerName": "nl.mirror.flokinet.net",
+    "ServerName": ":fakehost",
     "NumConn": 30,
     "KeepAlive": 0,
     "BrowserSig": "chrome",
@@ -122,7 +137,7 @@ sudo tee /etc/cloak/cloak-server.json << EOF
     "BypassUID": [
         "$ck_uid"
     ],
-    "RedirAddr": "nl.mirror.flokinet.net",
+    "RedirAddr": ":fakehost",
     "PrivateKey": "$ck_privateKey"
 }
 EOF    
@@ -195,5 +210,6 @@ sudo wg</code></pre>
     document.getElementById("client").innerHTML = subst(client, params);
     document.getElementById("server").innerHTML = subst(server, params);
 }
-  
+
+fill();
 update();
