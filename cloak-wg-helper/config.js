@@ -1,5 +1,8 @@
 var params = {
     fakehost: '',
+    cloakClient: '',
+    cloakServer: '',
+    cloakGateway: '',
     cloakEncryptionMethod: '',
     cloakNumberOfConnections: ''
 }
@@ -62,7 +65,7 @@ Description=Cloak Client Service
 After=network-online.target
 
 [Service]
-ExecStart=/usr/bin/ck-client -s $CLOAK_REMOTE_SERVER -p 443 -i 127.0.0.1 -u -c /etc/cloak/cloak-client.json
+ExecStart=/usr/bin/ck-client -s :cloakServer -p 443 -i 127.0.0.1 -u -c /etc/cloak/cloak-client.json
 WorkingDirectory=/tmp
 StandardOutput=inherit
 StandardError=inherit
@@ -92,14 +95,14 @@ Address = 10.1.1.2/32
 MTU = 1420
   
 PostUp = iptables -t nat -A POSTROUTING -o wg0 -j MASQUERADE
-PostUp = ip route add $CLOAK_SERVER_LISTENING_ADDRESS/32 via $CLOAK_CLIENT_GATEWAY
+PostUp = ip route add :cloakServer/32 via :cloakGateway
   
 PostDown = iptables -t nat -D POSTROUTING -o wg0 -j MASQUERADE
-PostDown = ip route del $CLOAK_SERVER_LISTENING_ADDRESS/32 via $CLOAK_CLIENT_GATEWAY
+PostDown = ip route del :cloakServer/32 via :cloakGateway
   
 [Peer]
 PublicKey = $WG_ServerPublicKey
-Endpoint = $CLOAK_CLIENT_LISTENING_ADDRESS:1984
+Endpoint = :cloakClient:1984
 AllowedIPs = 0.0.0.0/0
 EOF
 </code></pre>
@@ -136,7 +139,7 @@ sudo tee /etc/cloak/cloak-server.json << EOF
         ]
     },
     "BindAddr": [
-        ":443"
+        ":cloakServer:443"
     ],
     "BypassUID": [
         "$ck_uid"
