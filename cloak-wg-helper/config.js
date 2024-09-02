@@ -4,7 +4,9 @@ var params = {
     cloakServer: '',
     cloakGateway: '',
     cloakEncryptionMethod: '',
-    cloakNumberOfConnections: ''
+    cloakNumberOfConnections: '',
+    wireguardClientPrivate: '',
+    wireguardClientPublic: ''
 }
 
 function fill(){
@@ -26,6 +28,11 @@ function onChange(key, value){
     Array.from(elms, element => {
         element.innerText=value
     });
+}
+
+function regenerateWireguard(){
+    document.getElementById("wireguardClientPrivate").value = "wg_client_private";
+    document.getElementById("wireguardClientPublic").value = "wg_client_public";
 }
 
 function update(){
@@ -90,7 +97,7 @@ sudo systemctl status cloak-client.service
 <h4>1.6 Create Wireguard Client config</h4>
 <pre><code>sudo tee /etc/wireguard/client-wg0.conf << EOF
 [Interface]
-PrivateKey = $WG_ClientPrivateKey
+PrivateKey = :wireguardClientPrivate
 Address = 10.1.1.2/32
 MTU = 1420
   
@@ -122,7 +129,7 @@ sudo sysctl -p</code></pre>
 let server = `
 <h3>2. Outgoing VM</h3>
   
-<h4>1.1 Install Cloak Server binary</h4>
+<h4>2.1 Install Cloak Server binary</h4>
 <pre><code>wget https://github.com/cbeuw/Cloak/releases/download/v2.7.0/ck-server-linux-amd64-v2.7.0 -O ck-server
   
 chmod +x ck-server
@@ -202,7 +209,7 @@ PostDown = iptables -D FORWARD -i wg0 -j ACCEPT
 PostDown = iptables -t nat -D POSTROUTING -o $default_interface -j MASQUERADE
   
 [Peer]
-PublicKey = $WG_ClientPublicKey
+PublicKey = :wireguardClientPublic
 AllowedIPs = 10.1.1.2/32
 EOF
 </code></pre>
@@ -218,5 +225,6 @@ sudo wg</code></pre>
     document.getElementById("server").innerHTML = subst(server, params);
 }
 
+regenerateWireguard();
 fill();
 update();
