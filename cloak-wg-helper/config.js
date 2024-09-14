@@ -5,12 +5,13 @@ var params = {
     cloakGateway: '',
     cloakEncryptionMethod: '',
     cloakNumberOfConnections: '',
+    cloakServerPrivate: '',
+    cloakServerPublic: '',
     wireguardClientPrivate: '',
     wireguardClientPublic: '',
     wireguardServerPrivate: '',
     wireguardServerPublic: '',
     wireguardMTU: ''
-
 }
 
 function fill(){
@@ -63,13 +64,31 @@ function regenerateWGServer(){
     document.getElementById("wireguardServerPublic").value  = wgServer.publicKey;
     onChange("wireguardServerPrivate",wgServer.privateKey);
     onChange("wireguardServerPublic" ,wgServer.publicKey);
+}
 
+function updateCloakServer(privateKey){
+    cloakServer = window.wireguard.generateKeypairForPrivate(privateKey)
+    document.getElementById("cloakServerPublic").value  = cloakServer.publicKey;
+    onChange("cloakServerPrivate",cloakServer.privateKey);
+    onChange("cloakServerPublic" ,cloakServer.publicKey);
+}
+
+function regenerateCloakServer(){
+    var cloakServer = window.wireguard.generateKeypair()
+    document.getElementById("cloakServerPrivate").value = cloakServer.privateKey;
+    document.getElementById("cloakServerPublic").value  = cloakServer.publicKey;
+    onChange("cloakServerPrivate",cloakServer.privateKey);
+    onChange("cloakServerPublic" ,cloakServer.publicKey);
 }
 
 
 function regenerateWireguard(){
     regenerateWGClient();
     regenerateWGServer();
+}
+
+function regenerateCloak(){
+    regenerateCloakServer();
 }
 
 
@@ -94,7 +113,7 @@ sudo tee /etc/cloak/cloak-client.json << EOF
     "ProxyMethod": "wireguard",
     "EncryptionMethod": ":cloakEncryptionMethod",
     "UID": "$ck_uid",
-    "PublicKey": "$ck_publicKey",
+    "PublicKey": ":cloakServerPublic",
     "ServerName": ":fakehost",
     "NumConn": :cloakNumberOfConnections,
     "KeepAlive": 0,
@@ -190,7 +209,7 @@ sudo tee /etc/cloak/cloak-server.json << EOF
         "$ck_uid"
     ],
     "RedirAddr": ":fakehost",
-    "PrivateKey": "$ck_privateKey"
+    "PrivateKey": ":cloakServerPrivate"
 }
 EOF    
 </code></pre>
@@ -265,6 +284,7 @@ sudo wg</code></pre>
 
 window.onload = function() {
     regenerateWireguard();
+    regenerateCloak();
     fill();
     update();    
 };
