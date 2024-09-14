@@ -29,6 +29,49 @@ function fill(){
     }
 }
 
+function isValidIPaddress(ipaddress) {  
+    return (/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(ipaddress))
+}
+
+/*
+function zeroPad(num, places) {
+    return String(num).padStart(places, '0')
+}
+
+function linesNumbers(str) {
+    var n = str.split(/\r\n|\r|\n/).length
+    return [...Array(n).keys()].map((i)=> zeroPad(i+1,3)).join("\n")
+}
+*/
+
+function cloakClientUpdate(value){
+    if (isValidIPaddress(value)) {
+        document.getElementById("cloakClient").style.color="green"
+        onChange("cloakClient", value);
+    } else {
+        document.getElementById("cloakClient").style.color="red"
+    }
+}
+
+function cloakGatewayUpdate(value){
+    if (isValidIPaddress(value)) {
+        document.getElementById("cloakGateway").style.color="green"
+        onChange("cloakGateway", value);
+    } else {
+        document.getElementById("cloakGateway").style.color="red"
+    }
+}
+
+function cloakServerUpdate(value){
+    if (isValidIPaddress(value)) {
+        document.getElementById("cloakServer").style.color="green"
+        onChange("cloakServer", value);
+    } else {
+        document.getElementById("cloakServer").style.color="red"
+    }
+}
+
+
 function subst(string, data) {
     return string.replace(/:([a-zA-Z]+)/g, (m, i) => i in data ? "<b style='background-color:powderblue;' id='"+i+"_'>"+data[i]+"</b>" : m)
 }
@@ -200,8 +243,7 @@ sudo sysctl -p</code></pre>
 `
   
 let server = `
-<pre><code>
-# ----------------- 2.1 Install Cloak Server binary ----------------------
+<pre><code># ----------------- 2.1 Install Cloak Server binary ----------------------
 wget https://github.com/cbeuw/Cloak/releases/download/v2.7.0/ck-server-:serverOS-:serverArch-v2.7.0 -O ck-server
 chmod +x ck-server
 sudo mv ck-server /usr/bin/ck-server
@@ -289,7 +331,6 @@ sudo systemctl restart wg-quick@wg0.service
 sudo systemctl status wg-quick@wg0.service
 sudo wg</code></pre>
 `
-  
     document.getElementById("client").innerHTML = subst(client, params);
     document.getElementById("server").innerHTML = subst(server, params);
 }
@@ -298,6 +339,5 @@ window.onload = function() {
     regenerateWireguard();
     regenerateCloak();
     fill();
-    update();    
+    update();
 };
-
