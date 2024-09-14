@@ -8,7 +8,8 @@ var params = {
     wireguardClientPrivate: '',
     wireguardClientPublic: '',
     wireguardServerPrivate: '',
-    wireguardServerPublic: ''
+    wireguardServerPublic: '',
+    wireguardMTU: ''
 
 }
 
@@ -136,7 +137,7 @@ sudo systemctl status cloak-client.service
 [Interface]
 PrivateKey = :wireguardClientPrivate
 Address = 10.1.1.2/32
-MTU = 1420
+MTU = :wireguardMTU
   
 PostUp = iptables -t nat -A POSTROUTING -o wg0 -j MASQUERADE
 PostUp = ip route add :cloakServer/32 via :cloakGateway
