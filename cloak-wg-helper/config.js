@@ -263,6 +263,9 @@ sudo wg</code></pre>
     document.getElementById("server").innerHTML = subst(server, params);
 }
 
-regenerateWireguard();
-fill();
-update();
+window.onload = function() {
+    regenerateWireguard();
+    fill();
+    update();    
+};
+
