@@ -7,6 +7,8 @@ var params = {
     cloakNumberOfConnections: '',
     cloakServerPrivate: '',
     cloakServerPublic: '',
+    cloakUID: '',
+    cloakUIDBase: '',
     wireguardClientPrivate: '',
     wireguardClientPublic: '',
     wireguardServerPrivate: '',
@@ -81,6 +83,17 @@ function regenerateCloakServer(){
     onChange("cloakServerPublic" ,cloakServer.publicKey);
 }
 
+function updateCloakUID(cloakUID){
+    document.getElementById("cloakUIDBase").value = window.cloak.hexToBase64(cloakUID);
+    onChange('cloakUIDBase', document.getElementById("cloakUIDBase").value);
+}
+
+function regenerateCloakUID(){
+    var cloakUID = window.cloak.generateUID()
+    document.getElementById("cloakUID").value = cloakUID
+    document.getElementById("cloakUIDBase").value = window.cloak.hexToBase64(cloakUID)
+    onChange('cloakUIDBase', document.getElementById("cloakUIDBase").value);
+}
 
 function regenerateWireguard(){
     regenerateWGClient();
@@ -89,6 +102,7 @@ function regenerateWireguard(){
 
 function regenerateCloak(){
     regenerateCloakServer();
+    regenerateCloakUID();
 }
 
 
@@ -112,7 +126,7 @@ sudo tee /etc/cloak/cloak-client.json << EOF
     "Transport": "direct",
     "ProxyMethod": "wireguard",
     "EncryptionMethod": ":cloakEncryptionMethod",
-    "UID": "$ck_uid",
+    "UID": ":cloakUIDBase",
     "PublicKey": ":cloakServerPublic",
     "ServerName": ":fakehost",
     "NumConn": :cloakNumberOfConnections,
@@ -206,7 +220,7 @@ sudo tee /etc/cloak/cloak-server.json << EOF
         ":cloakServer:443"
     ],
     "BypassUID": [
-        "$ck_uid"
+        ":cloakUIDBase"
     ],
     "RedirAddr": ":fakehost",
     "PrivateKey": ":cloakServerPrivate"

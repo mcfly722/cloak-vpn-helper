@@ -38,7 +38,7 @@ body {
 }
 
 .left, .right {
-    border: none; /* No visible border */
+    border: none;
 }
 
 .table, .tr, .td {
@@ -50,4 +50,8 @@ body {
 tr {
     height: 30px;
     text-wrap: nowrap;
+}
+
+input {
+    font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;
 }
