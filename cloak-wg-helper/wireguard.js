@@ -196,6 +196,12 @@
 			return generatePrivateKey();
 		},
 		generateKeypairForPrivate: function(base64PrivateKey){
+			if (base64PrivateKey === undefined || base64PrivateKey == null || base64PrivateKey.length <= 0) {
+				return {
+					publicKey: 'INCORRECT PRIVATE KEY',
+					privateKey: base64PrivateKey
+				}
+			}
 			try {
 				var privateKey = base64ToUint8Array(base64PrivateKey);
 			} catch {
