@@ -13,7 +13,11 @@ var params = {
     wireguardClientPublic: '',
     wireguardServerPrivate: '',
     wireguardServerPublic: '',
-    wireguardMTU: ''
+    wireguardMTU: '',
+    clientArch: '',
+    serverArch: '',
+    clientOS: '',
+    serverOS: ''
 }
 
 function fill(){
@@ -112,7 +116,7 @@ function update(){
 <h3>1. Local Gateway</h3>
   
 <h4>1.1 Install Cloak Client binary</h4>
-<pre><code>curl -L https://github.com/cbeuw/Cloak/releases/download/v2.7.0/ck-client-linux-arm64-v2.7.0 > ck-client
+<pre><code>curl -L https://github.com/cbeuw/Cloak/releases/download/v2.7.0/ck-client-:clientOS-:clientArch-v2.7.0 > ck-client
 chmod +x ck-client
   
 sudo mv ck-client /usr/bin/ck-client
@@ -201,7 +205,7 @@ let server = `
 <h3>2. Outgoing VM</h3>
   
 <h4>2.1 Install Cloak Server binary</h4>
-<pre><code>wget https://github.com/cbeuw/Cloak/releases/download/v2.7.0/ck-server-linux-amd64-v2.7.0 -O ck-server
+<pre><code>wget https://github.com/cbeuw/Cloak/releases/download/v2.7.0/ck-server-:serverOS-:serverArch-v2.7.0 -O ck-server
   
 chmod +x ck-server
 sudo mv ck-server /usr/bin/ck-server</code></pre>
