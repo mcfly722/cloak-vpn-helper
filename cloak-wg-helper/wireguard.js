@@ -171,12 +171,39 @@
 		return String.fromCharCode.apply(null, base64);
 	}
 
+	function base64ToUint8Array(base64) {
+		var binaryString = atob(base64);
+		var bytes = new Uint8Array(binaryString.length);
+		for (var i = 0; i < binaryString.length; i++) {
+			bytes[i] = binaryString.charCodeAt(i);
+		}
+		return bytes;
+	}
+
 	window.wireguard = {
 		generatePresharedKey: function() {
 			return keyToBase64(generatePresharedKey());
 		},
 		generateKeypair: function() {
 			var privateKey = generatePrivateKey();
+			var publicKey = generatePublicKey(privateKey);
+			return {
+				publicKey: keyToBase64(publicKey),
+				privateKey: keyToBase64(privateKey)
+			};
+		},
+		gereratePrivateKey: function() {
+			return generatePrivateKey();
+		},
+		generateKeypairForPrivate: function(base64PrivateKey){
+			try {
+				var privateKey = base64ToUint8Array(base64PrivateKey);
+			} catch {
+				return {
+					publicKey: 'INCORRECT PRIVATE KEY',
+					privateKey: base64PrivateKey
+				}
+			}
 			var publicKey = generatePublicKey(privateKey);
 			return {
 				publicKey: keyToBase64(publicKey),

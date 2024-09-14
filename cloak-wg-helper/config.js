@@ -6,7 +6,10 @@ var params = {
     cloakEncryptionMethod: '',
     cloakNumberOfConnections: '',
     wireguardClientPrivate: '',
-    wireguardClientPublic: ''
+    wireguardClientPublic: '',
+    wireguardServerPrivate: '',
+    wireguardServerPublic: ''
+
 }
 
 function fill(){
@@ -30,10 +33,44 @@ function onChange(key, value){
     });
 }
 
-function regenerateWireguard(){
-    document.getElementById("wireguardClientPrivate").value = "wg_client_private";
-    document.getElementById("wireguardClientPublic").value = "wg_client_public";
+function updateWGClient(privateKey){
+    wgClient = window.wireguard.generateKeypairForPrivate(privateKey)
+    document.getElementById("wireguardClientPublic").value  = wgClient.publicKey;
+    onChange("wireguardClientPrivate",wgClient.privateKey);
+    onChange("wireguardClientPublic" ,wgClient.publicKey);
 }
+
+function updateWGServer(privateKey){
+    wgServer = window.wireguard.generateKeypairForPrivate(privateKey)
+    document.getElementById("wireguardServerPublic").value  = wgServer.publicKey;
+    onChange("wireguardServerPrivate",wgServer.privateKey);
+    onChange("wireguardServerPublic" ,wgServer.publicKey);
+}
+
+function regenerateWGClient(){
+    var wgClient = window.wireguard.generateKeypair()
+    
+    document.getElementById("wireguardClientPrivate").value = wgClient.privateKey;
+    document.getElementById("wireguardClientPublic").value  = wgClient.publicKey;
+    onChange("wireguardClientPrivate",wgClient.privateKey);
+    onChange("wireguardClientPublic" ,wgClient.publicKey);
+}
+
+function regenerateWGServer(){
+    var wgServer = window.wireguard.generateKeypair()
+    document.getElementById("wireguardServerPrivate").value = wgServer.privateKey;
+    document.getElementById("wireguardServerPublic").value  = wgServer.publicKey;
+    onChange("wireguardServerPrivate",wgServer.privateKey);
+    onChange("wireguardServerPublic" ,wgServer.publicKey);
+
+}
+
+
+function regenerateWireguard(){
+    regenerateWGClient();
+    regenerateWGServer();
+}
+
 
 function update(){
 
@@ -108,7 +145,7 @@ PostDown = iptables -t nat -D POSTROUTING -o wg0 -j MASQUERADE
 PostDown = ip route del :cloakServer/32 via :cloakGateway
   
 [Peer]
-PublicKey = $WG_ServerPublicKey
+PublicKey = :wireguardServerPublic
 Endpoint = :cloakClient:1984
 AllowedIPs = 0.0.0.0/0
 EOF
@@ -196,7 +233,7 @@ sudo systemctl status cloak-server.service</code></pre>
   
 sudo tee /etc/wireguard/wg0.conf << EOF
 [Interface]
-PrivateKey = $WG_ServerPrivateKey
+PrivateKey = :wireguardServerPrivate
 Address = 10.1.1.1/24
 ListenPort = 51820
 PostUp = iptables -I INPUT -p udp --dport 51820 -j ACCEPT
