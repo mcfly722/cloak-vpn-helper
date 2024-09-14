@@ -113,18 +113,15 @@ function regenerateCloak(){
 function update(){
 
     let client = `
-<h3>1. Local Gateway</h3>
-  
-<h4>1.1 Install Cloak Client binary</h4>
-<pre><code>curl -L https://github.com/cbeuw/Cloak/releases/download/v2.7.0/ck-client-:clientOS-:clientArch-v2.7.0 > ck-client
+<pre><code># ------------------ 1.1 Install Cloak Client binary ---------------------
+curl -L https://github.com/cbeuw/Cloak/releases/download/v2.7.0/ck-client-:clientOS-:clientArch-v2.7.0 > ck-client
 chmod +x ck-client
-  
 sudo mv ck-client /usr/bin/ck-client
-sudo mkdir -p /etc/config/cloak</code></pre>
-  
-<h4>1.2 Create Cloak client config</h4>
-<pre><code>sudo mkdir -p /etc/cloak
- 
+sudo mkdir -p /etc/config/cloak
+
+
+# ------------------ 1.2 Create Cloak client config ----------------------
+sudo mkdir -p /etc/cloak
 sudo tee /etc/cloak/cloak-client.json << EOF
 {
     "Transport": "direct",
@@ -138,10 +135,11 @@ sudo tee /etc/cloak/cloak-client.json << EOF
     "BrowserSig": "chrome",
     "StreamTimeout": 300
 }
-EOF</code></pre>
-  
-<h4>1.3 Register Cloak Client as service</h4>
-<pre><code>sudo tee /lib/systemd/system/cloak-client.service << EOF
+EOF
+
+
+# --------------- 1.3 Register Cloak Client as service -------------------
+sudo tee /lib/systemd/system/cloak-client.service << EOF
 [Unit]
 Description=Cloak Client Service
 After=network-online.target
@@ -157,28 +155,27 @@ User=root
 [Install]
 WantedBy=multi-user.target
 EOF
-</code></pre>
-  
-<h4>1.4 Start Cloak Client service</h4>
-<pre><code>sudo systemctl daemon-reload
+
+
+# ------------------ 1.4 Start Cloak Client service ----------------------
+sudo systemctl daemon-reload
 sudo systemctl enable cloak-client.service
 sudo systemctl restart cloak-client.service
 sudo systemctl status cloak-client.service
-</code></pre>
+
+
+# ------------------ 1.5 Install Wireguard Client ------------------------
+sudo apt install -y wireguard openresolv iptables
   
-<h4>1.5 Install Wireguard Client</h4>
-<pre><code>sudo apt install -y wireguard openresolv iptables</code></pre>
-  
-<h4>1.6 Create Wireguard Client config</h4>
-<pre><code>sudo tee /etc/wireguard/client-wg0.conf << EOF
+
+# --------------- 1.6 Create Wireguard Client config ---------------------
+sudo tee /etc/wireguard/client-wg0.conf << EOF
 [Interface]
 PrivateKey = :wireguardClientPrivate
 Address = 10.1.1.2/32
 MTU = :wireguardMTU
-  
 PostUp = iptables -t nat -A POSTROUTING -o wg0 -j MASQUERADE
 PostUp = ip route add :cloakServer/32 via :cloakGateway
-  
 PostDown = iptables -t nat -D POSTROUTING -o wg0 -j MASQUERADE
 PostDown = ip route del :cloakServer/32 via :cloakGateway
   
@@ -187,31 +184,31 @@ PublicKey = :wireguardServerPublic
 Endpoint = :cloakClient:1984
 AllowedIPs = 0.0.0.0/0
 EOF
-</code></pre>
-  
-<h4>1.7 Start Wireguard Client service</h4>
-<pre><code>sudo systemctl enable wg-quick@wg0.service
+
+
+# --------------- 1.7 Start Wireguard Client service ---------------------
+sudo systemctl enable wg-quick@wg0.service
 sudo systemctl restart wg-quick@wg0.service
-sudo systemctl status wg-quick@wg0.service</code></pre>
+sudo systemctl status wg-quick@wg0.service
+
   
-<h4>1.8 Enable IPv4 Gateway Forwarding</h4>
-<pre><code>echo "net.ipv4.ip_forward=1"          | sudo tee -a /etc/sysctl.conf
+# --------------- 1.8 Enable IPv4 Gateway Forwarding ---------------------
+echo "net.ipv4.ip_forward=1"          | sudo tee -a /etc/sysctl.conf
 echo "net.ipv4.conf.all.forwarding=1" | sudo tee -a /etc/sysctl.conf
 sudo sysctl -p</code></pre>
   
 `
   
 let server = `
-<h3>2. Outgoing VM</h3>
-  
-<h4>2.1 Install Cloak Server binary</h4>
-<pre><code>wget https://github.com/cbeuw/Cloak/releases/download/v2.7.0/ck-server-:serverOS-:serverArch-v2.7.0 -O ck-server
-  
+<pre><code>
+# ----------------- 2.1 Install Cloak Server binary ----------------------
+wget https://github.com/cbeuw/Cloak/releases/download/v2.7.0/ck-server-:serverOS-:serverArch-v2.7.0 -O ck-server
 chmod +x ck-server
-sudo mv ck-server /usr/bin/ck-server</code></pre>
-  
-<h4>2.2 Create Cloak Server config</h4>
-<pre><code>sudo mkdir -p /etc/cloak
+sudo mv ck-server /usr/bin/ck-server
+
+
+# ----------------- 2.2 Create Cloak Server config -----------------------
+sudo mkdir -p /etc/cloak
 sudo tee /etc/cloak/cloak-server.json << EOF
 {
     "ProxyBook": {
@@ -230,11 +227,9 @@ sudo tee /etc/cloak/cloak-server.json << EOF
     "PrivateKey": ":cloakServerPrivate"
 }
 EOF    
-</code></pre>
 
-
-<h4>2.3 Register Cloak Server service</h4>
-<pre><code>sudo tee /etc/systemd/system/cloak-server.service << EOF
+# ---------------- 2.3 Register Cloak Server service ---------------------
+sudo tee /etc/systemd/system/cloak-server.service << EOF
 [Unit]
 Description=cloak-server
 After=network.target
@@ -248,27 +243,26 @@ Restart=always
 [Install]
 WantedBy=multi-user.target
 EOF
-</code></pre>
 
 
-<h4>2.4 Start Cloak Server service</h4>
-<pre><code>sudo systemctl daemon-reload
+# ----------------- 2.4 Start Cloak Server service -----------------------
+sudo systemctl daemon-reload
 sudo systemctl enable cloak-server.service
 sudo systemctl restart cloak-server.service
-sudo systemctl status cloak-server.service</code></pre>
+sudo systemctl status cloak-server.service
 
 
-<h4>2.5 Allow incomming HTTPS connections on Cloak Server service</h4>
-<pre><code>sudo ufw allow 443</code></pre>
+# ---- 2.5 Allow incomming HTTPS connections on Cloak Server service -----
+sudo ufw allow 443
 
 
-<h4>2.6 Install Wireguard Server service</h4>
-<pre><code>sudo apt install -y wireguard openresolv iptables</code></pre>
+# --------------- 2.6 Install Wireguard Server service -------------------
+sudo apt install -y wireguard openresolv iptables
 
 
-<h4>2.7 Create Wireguard Server config</h4>
-<pre><code>export default_interface=$(ip route | awk '/default/ {print $5; exit}')
-  
+# ---------------- 2.7 Create Wireguard Server config --------------------
+export default_interface=$(ip route | awk '/default/ {print $5; exit}')
+
 sudo tee /etc/wireguard/wg0.conf << EOF
 [Interface]
 PrivateKey = :wireguardServerPrivate
@@ -287,10 +281,10 @@ PostDown = iptables -t nat -D POSTROUTING -o $default_interface -j MASQUERADE
 PublicKey = :wireguardClientPublic
 AllowedIPs = 10.1.1.2/32
 EOF
-</code></pre>
-  
-<h4>2.7 Start Wireguard Server service</h4>
-<pre><code>sudo systemctl enable wg-quick@wg0.service
+
+
+# ---------------- 2.7 Start Wireguard Server service --------------------
+sudo systemctl enable wg-quick@wg0.service
 sudo systemctl restart wg-quick@wg0.service
 sudo systemctl status wg-quick@wg0.service
 sudo wg</code></pre>
