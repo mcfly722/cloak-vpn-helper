@@ -21,13 +21,12 @@ Finally, data flows through the following chain:
 
 <br>
 Helper generates required key pairs and gives you final bash scripts for deployment.<br>
-Note: <b>all keys generates on client side (by your internet browser) and not transmitted to any servers! (it is zero trust configurator)</b>
-
+<b>All keys generates on client side (by your internet browser) and not transmitted to any servers! (it is zero trust configurator)</b>
+<br>
 <br>
 Helper site: <a href="https://mcfly722.github.io/cloak-vpn-helper">https://mcfly722.github.io/cloak-vpn-helper</a>
-
-
-
+<br>
+<br>
 
 ## Supported OS
 
@@ -36,8 +35,6 @@ Helper site: <a href="https://mcfly722.github.io/cloak-vpn-helper">https://mcfly
 | Raspberry Pi OS | x64 | arm64 | ✔ |
 | Ubuntu 24.04 | x64 | amd64 | ✔ |
 | Ubuntu 22.04 | x64 | amd64 | ✔ |
-
-
 
 ## Debug & Troubleshooting
 
