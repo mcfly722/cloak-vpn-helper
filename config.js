@@ -202,7 +202,7 @@ EOF
 
 
 # --------------- 1.3 Register Cloak Client as service -------------------
-sudo tee /lib/systemd/system/cloak-client.service << EOF
+sudo tee /etc/systemd/system/cloak-client.service << EOF
 [Unit]
 Description=Cloak Client Service
 After=network-online.target
@@ -298,9 +298,12 @@ After=network.target
 StartLimitIntervalSec=0
   
 [Service]
-Type=simple
 ExecStart=/usr/bin/ck-server -c /etc/cloak/cloak-server.json
+WorkingDirectory=/tmp
+StandardOutput=inherit
+StandardError=inherit
 Restart=always
+User=root
   
 [Install]
 WantedBy=multi-user.target
