@@ -1,8 +1,3 @@
-/*! SPDX-License-Identifier: GPL-2.0
- *
- * Copyright (C) 2015-2020 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
- */
-
 (function() {
 	function gf(init) {
 		var r = new Float64Array(16);
@@ -180,7 +175,7 @@
 		return bytes;
 	}
 
-	window.wireguard = {
+	window.curve25519 = {
 		generatePresharedKey: function() {
 			return keyToBase64(generatePresharedKey());
 		},

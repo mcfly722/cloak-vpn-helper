@@ -25,12 +25,12 @@ var validators = {
     cloakClient:            function(value) { return isValidIPaddress(value); },
     cloakServer:            function(value) { return isValidIPaddress(value); },
     cloakGateway:           function(value) { return isValidIPaddress(value); },
-    cloakServerPrivate:     function(value) { return !window.wireguard.generateKeypairForPrivate(value).publicKey.includes("INCORRECT"); },
+    cloakServerPrivate:     function(value) { return !window.curve25519.generateKeypairForPrivate(value).publicKey.includes("INCORRECT"); },
     cloakServerPublic:      function(value) { return !value.includes("INCORRECT"); },
     cloakUIDBase:           function(value) { return !value.includes("INCORRECT"); },
-    wireguardClientPrivate: function(value) { return !window.wireguard.generateKeypairForPrivate(value).publicKey.includes("INCORRECT"); },
+    wireguardClientPrivate: function(value) { return !window.curve25519.generateKeypairForPrivate(value).publicKey.includes("INCORRECT"); },
     wireguardClientPublic:  function(value) { return !value.includes("INCORRECT"); },
-    wireguardServerPrivate: function(value) { return !window.wireguard.generateKeypairForPrivate(value).publicKey.includes("INCORRECT"); },
+    wireguardServerPrivate: function(value) { return !window.curve25519.generateKeypairForPrivate(value).publicKey.includes("INCORRECT"); },
     wireguardServerPublic:  function(value) { return !value.includes("INCORRECT"); },
     clientArch:             function(value) { return !value.includes("not specified"); },
     serverArch:             function(value) { return !value.includes("not specified"); }
@@ -108,21 +108,21 @@ function onChange(key, value){
 }
 
 function updateWGClient(privateKey){
-    wgClient = window.wireguard.generateKeypairForPrivate(privateKey)
+    wgClient = window.curve25519.generateKeypairForPrivate(privateKey)
     document.getElementById("wireguardClientPublic").value  = wgClient.publicKey;
     onChange("wireguardClientPrivate",wgClient.privateKey);
     onChange("wireguardClientPublic" ,wgClient.publicKey);
 }
 
 function updateWGServer(privateKey){
-    wgServer = window.wireguard.generateKeypairForPrivate(privateKey)
+    wgServer = window.curve25519.generateKeypairForPrivate(privateKey)
     document.getElementById("wireguardServerPublic").value  = wgServer.publicKey;
     onChange("wireguardServerPrivate",wgServer.privateKey);
     onChange("wireguardServerPublic" ,wgServer.publicKey);
 }
 
 function regenerateWGClient(){
-    var wgClient = window.wireguard.generateKeypair()
+    var wgClient = window.curve25519.generateKeypair()
     
     document.getElementById("wireguardClientPrivate").value = wgClient.privateKey;
     document.getElementById("wireguardClientPublic").value  = wgClient.publicKey;
@@ -131,7 +131,7 @@ function regenerateWGClient(){
 }
 
 function regenerateWGServer(){
-    var wgServer = window.wireguard.generateKeypair()
+    var wgServer = window.curve25519.generateKeypair()
     document.getElementById("wireguardServerPrivate").value = wgServer.privateKey;
     document.getElementById("wireguardServerPublic").value  = wgServer.publicKey;
     onChange("wireguardServerPrivate",wgServer.privateKey);
@@ -139,14 +139,14 @@ function regenerateWGServer(){
 }
 
 function updateCloakServer(privateKey){
-    cloakServer = window.wireguard.generateKeypairForPrivate(privateKey)
+    cloakServer = window.curve25519.generateKeypairForPrivate(privateKey)
     document.getElementById("cloakServerPublic").value  = cloakServer.publicKey;
     onChange("cloakServerPrivate",cloakServer.privateKey);
     onChange("cloakServerPublic" ,cloakServer.publicKey);
 }
 
 function regenerateCloakServer(){
-    var cloakServer = window.wireguard.generateKeypair()
+    var cloakServer = window.curve25519.generateKeypair()
     document.getElementById("cloakServerPrivate").value = cloakServer.privateKey;
     document.getElementById("cloakServerPublic").value  = cloakServer.publicKey;
     onChange("cloakServerPrivate",cloakServer.privateKey);
