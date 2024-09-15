@@ -17,12 +17,24 @@ Cloak and Wireguard configs locations:
 | Location | File |
 | :------- | :--- |
 | Local Gateway | /etc/cloak/cloak-client.json |
-| External VM | /etc/cloak/cloak-server.json |
 | Local Gateway | /etc/wireguard/wg0.conf |
+| External VM | /etc/cloak/cloak-server.json |
 | External VM | /etc/wireguard/wg0.conf |
 <br>
-### view logs:
+### view logs
+
 ```
+# view journals
 sudo journalctl -u cloak-server.service -f
 sudo journalctl -u cloak-client.service -f
+
+# for internal gateway
+ss -nltu 'sport = 1984'
+sudo tcpdump -i any -nn src host <YOUR EXTERNAL VM IP> and port 443
+
+# for remote VM
+ss -nltu 'sport = 443'
+ss -nltu 'sport = 51820'
+sudo tcpdump -nei ens3 tcp port 443
+sudo tcpdump -nei ens3 udp port 51820
 ```
