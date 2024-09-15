@@ -1,5 +1,5 @@
 # Cloak + Wireguard VPN Gateway helper
-![Status: in progress](https://img.shields.io/badge/status-in%20progress-success.svg)
+![Status: done](https://img.shields.io/badge/status-done-success.svg)
 ![version](https://img.shields.io/badge/version-1.2-blue)
 [![License: GPL3.0](https://img.shields.io/badge/License-GPL3.0-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.html)
 <br>
@@ -12,7 +12,18 @@ This helper simplifies this installation using <a href="https://github.com/cbeuw
 <br>
 Helper generates required key pairs and gives you final bash scripts for final installation.<br>
 Note: <b>all keys generates on client side (by your internet browser) and not transmitted to any servers! (it is zero trust configurator)</b>
-## Troubleshooting
+
+## Supported OS
+
+| OS | bit | Architecture | Tested |
+| -- | --- | ------------ | ------ |
+| Raspberry Pi OS | x64 | arm64 | ✔ |
+| Ubuntu 24.04 | x64 | amd64 | ✔ |
+| Ubuntu 22.04 | x64 | amd64 | ✔ |
+
+
+
+## Debug & Troubleshooting
 
 Cloak and Wireguard configs locations:
 | Location | File |
