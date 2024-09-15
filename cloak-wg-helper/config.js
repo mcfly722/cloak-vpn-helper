@@ -20,6 +20,47 @@ var params = {
     serverOS: ''
 }
 
+var validators = {
+    fakehost:               function(value) { return value.length > 0},
+    cloakClient:            function(value) { return isValidIPaddress(value); },
+    cloakServer:            function(value) { return isValidIPaddress(value); },
+    cloakGateway:           function(value) { return isValidIPaddress(value); },
+    cloakServerPrivate:     function(value) { return !window.wireguard.generateKeypairForPrivate(value).publicKey.includes("INCORRECT"); },
+    cloakServerPublic:      function(value) { return !value.includes("INCORRECT"); },
+    cloakUIDBase:           function(value) { return !value.includes("INCORRECT"); },
+    wireguardClientPrivate: function(value) { return !window.wireguard.generateKeypairForPrivate(value).publicKey.includes("INCORRECT"); },
+    wireguardClientPublic:  function(value) { return !value.includes("INCORRECT"); },
+    wireguardServerPrivate: function(value) { return !window.wireguard.generateKeypairForPrivate(value).publicKey.includes("INCORRECT"); },
+    wireguardServerPublic:  function(value) { return !value.includes("INCORRECT"); }
+}
+
+function isValidIPaddress(ipaddress) {  
+    return (/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(ipaddress))
+}
+
+
+
+function isValid(key, value) {
+    if (validators.hasOwnProperty(key)) {
+        return (validators[key])(value)
+    } else {
+        true
+    }
+}
+
+function anyPropertiesHasErrors(){
+    var hasErrors = false
+    for(let key in validators) {
+        if (isValid(key, document.getElementById(key).value)){
+            document.getElementById(key).style.color="green"
+        } else {
+            document.getElementById(key).style.color="red"
+            hasErrors = true
+        }
+    }
+    return hasErrors
+}
+
 function fill(){
     for (let key in params) {
         element=document.getElementById(key)
@@ -27,10 +68,6 @@ function fill(){
             params[key]=element.value
         }
     }
-}
-
-function isValidIPaddress(ipaddress) {  
-    return (/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(ipaddress))
 }
 
 /*
@@ -44,39 +81,23 @@ function linesNumbers(str) {
 }
 */
 
-function cloakClientUpdate(value){
-    if (isValidIPaddress(value)) {
-        document.getElementById("cloakClient").style.color="green"
-        onChange("cloakClient", value);
-    } else {
-        document.getElementById("cloakClient").style.color="red"
-    }
-}
-
-function cloakGatewayUpdate(value){
-    if (isValidIPaddress(value)) {
-        document.getElementById("cloakGateway").style.color="green"
-        onChange("cloakGateway", value);
-    } else {
-        document.getElementById("cloakGateway").style.color="red"
-    }
-}
-
-function cloakServerUpdate(value){
-    if (isValidIPaddress(value)) {
-        document.getElementById("cloakServer").style.color="green"
-        onChange("cloakServer", value);
-    } else {
-        document.getElementById("cloakServer").style.color="red"
-    }
-}
-
-
 function subst(string, data) {
     return string.replace(/:([a-zA-Z]+)/g, (m, i) => i in data ? "<b style='background-color:powderblue;' id='"+i+"_'>"+data[i]+"</b>" : m)
 }
 
 function onChange(key, value){
+    if (anyPropertiesHasErrors()) {
+        document.getElementById("client").style.userSelect = "none";
+        document.getElementById("server").style.userSelect = "none";
+        document.getElementById("configs").innerHTML="Configs copying blocked!<br> Please, fix all highlighted errors and fill required fileds."
+        document.getElementById("configs").style.color="Red"
+    } else {
+        document.getElementById("client").style.userSelect = "text";
+        document.getElementById("server").style.userSelect = "text";
+        document.getElementById("configs").innerHTML="installation configs:"
+        document.getElementById("configs").style.color="black"
+    }
+
     params[key]=value
     var elms = document.querySelectorAll("[id='"+key+"_']")
     Array.from(elms, element => {
@@ -340,4 +361,5 @@ window.onload = function() {
     regenerateCloak();
     fill();
     update();
+    anyPropertiesHasErrors();
 };
