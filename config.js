@@ -227,12 +227,14 @@ sudo systemctl enable cloak-client.service
 sudo systemctl restart cloak-client.service
 sudo systemctl status cloak-client.service --no-pager -l
 
+# ----------------------- 1.5 Install IPTables ---------------------------
+sudo apt install -y iptables
 
-# ------------------ 1.5 Install Wireguard Client ------------------------
+# ------------------ 1.6 Install Wireguard Client ------------------------
 sudo apt install -y wireguard
   
 
-# --------------- 1.6 Create Wireguard Client config ---------------------
+# --------------- 1.7 Create Wireguard Client config ---------------------
 sudo tee /etc/wireguard/wg0.conf << EOF
 [Interface]
 PrivateKey = :wireguardClientPrivate
@@ -250,13 +252,13 @@ AllowedIPs = 0.0.0.0/0
 EOF
 
 
-# --------------- 1.7 Start Wireguard Client service ---------------------
+# --------------- 1.8 Start Wireguard Client service ---------------------
 sudo systemctl enable wg-quick@wg0.service
 sudo systemctl restart wg-quick@wg0.service
 sudo systemctl status wg-quick@wg0.service --no-pager -l
 
   
-# --------------- 1.8 Enable IPv4 Gateway Forwarding ---------------------
+# --------------- 1.9 Enable IPv4 Gateway Forwarding ---------------------
 echo "net.ipv4.ip_forward=1"          | sudo tee -a /etc/sysctl.conf
 echo "net.ipv4.conf.all.forwarding=1" | sudo tee -a /etc/sysctl.conf
 sudo sysctl -p</code></pre>
@@ -322,12 +324,15 @@ sudo systemctl status cloak-server.service --no-pager -l
 # ---- 2.5 Allow incomming HTTPS connections on Cloak Server service -----
 sudo ufw allow 443
 
+# ----------------------- 2.6 Install IPTables ---------------------------
+sudo apt install -y iptables
 
-# --------------- 2.6 Install Wireguard Server service -------------------
+
+# --------------- 2.7 Install Wireguard Server service -------------------
 sudo apt install -y wireguard
 
 
-# ---------------- 2.7 Create Wireguard Server config --------------------
+# ---------------- 2.8 Create Wireguard Server config --------------------
 export default_interface=$(ip route | awk '/default/ {print $5; exit}')
 
 sudo tee /etc/wireguard/wg0.conf << EOF
@@ -350,11 +355,17 @@ AllowedIPs = 10.1.1.2/32
 EOF
 
 
-# ---------------- 2.7 Start Wireguard Server service --------------------
+# ---------------- 2.9 Start Wireguard Server service --------------------
 sudo systemctl enable wg-quick@wg0.service
 sudo systemctl restart wg-quick@wg0.service
 sudo systemctl status wg-quick@wg0.service --no-pager -l
-sudo wg</code></pre>
+sudo wg
+
+
+# --------------- 2.10 Enable IPv4 Gateway Forwarding ---------------------
+echo "net.ipv4.ip_forward=1"          | sudo tee -a /etc/sysctl.conf
+echo "net.ipv4.conf.all.forwarding=1" | sudo tee -a /etc/sysctl.conf
+sudo sysctl -p</code></pre>
 `
     document.getElementById("client").innerHTML = subst(client, params);
     document.getElementById("server").innerHTML = subst(server, params);
