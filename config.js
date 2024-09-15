@@ -31,7 +31,9 @@ var validators = {
     wireguardClientPrivate: function(value) { return !window.wireguard.generateKeypairForPrivate(value).publicKey.includes("INCORRECT"); },
     wireguardClientPublic:  function(value) { return !value.includes("INCORRECT"); },
     wireguardServerPrivate: function(value) { return !window.wireguard.generateKeypairForPrivate(value).publicKey.includes("INCORRECT"); },
-    wireguardServerPublic:  function(value) { return !value.includes("INCORRECT"); }
+    wireguardServerPublic:  function(value) { return !value.includes("INCORRECT"); },
+    clientArch:             function(value) { return !value.includes("not specified"); },
+    serverArch:             function(value) { return !value.includes("not specified"); }
 }
 
 function isValidIPaddress(ipaddress) {  
