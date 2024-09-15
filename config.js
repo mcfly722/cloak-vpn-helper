@@ -178,10 +178,9 @@ function update(){
 
     let client = `
 <pre><code># ------------------ 1.1 Install Cloak Client binary ---------------------
-curl -L https://github.com/cbeuw/Cloak/releases/download/v2.7.0/ck-client-:clientOS-:clientArch-v2.7.0 > ck-client
+wget https://github.com/cbeuw/Cloak/releases/download/v2.7.0/ck-client-:clientOS-:clientArch-v2.7.0 -O ck-client
 chmod +x ck-client
 sudo mv ck-client /usr/bin/ck-client
-sudo mkdir -p /etc/config/cloak
 
 
 # ------------------ 1.2 Create Cloak client config ----------------------
