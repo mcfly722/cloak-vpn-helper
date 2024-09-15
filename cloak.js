@@ -17,7 +17,7 @@
     }
     window.cloak = {
         generateUID: function() {
-            return getRanHex(16);
+            return getRanHex(32);
         },
         hexToBase64: function(hex) {
             if (hex.length <= 0) {
