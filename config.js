@@ -229,7 +229,7 @@ sudo systemctl status cloak-client.service --no-pager -l
 
 
 # ------------------ 1.5 Install Wireguard Client ------------------------
-sudo apt install -y wireguard openresolv iptables
+sudo apt install -y wireguard
   
 
 # --------------- 1.6 Create Wireguard Client config ---------------------
@@ -324,7 +324,7 @@ sudo ufw allow 443
 
 
 # --------------- 2.6 Install Wireguard Server service -------------------
-sudo apt install -y wireguard openresolv iptables
+sudo apt install -y wireguard
 
 
 # ---------------- 2.7 Create Wireguard Server config --------------------

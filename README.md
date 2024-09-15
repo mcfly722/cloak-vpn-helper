@@ -20,3 +20,9 @@ Cloak and Wireguard configs locations:
 | External VM | /etc/cloak/cloak-server.json |
 | Local Gateway | /etc/wireguard/wg0.conf |
 | External VM | /etc/wireguard/wg0.conf |
+<br>
+### view logs:
+```
+sudo journalctl -u cloak-server.service -f
+sudo journalctl -u cloak-client.service -f
+```
