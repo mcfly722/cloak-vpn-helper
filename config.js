@@ -212,6 +212,7 @@ ExecStart=/usr/bin/ck-client -s :cloakServer -p 443 -i 127.0.0.1 -u -c /etc/cloa
 WorkingDirectory=/tmp
 StandardOutput=inherit
 StandardError=inherit
+OOMScoreAdjust=-100
 Restart=always
 User=root
 
@@ -224,7 +225,7 @@ EOF
 sudo systemctl daemon-reload
 sudo systemctl enable cloak-client.service
 sudo systemctl restart cloak-client.service
-sudo systemctl status cloak-client.service
+sudo systemctl status cloak-client.service --no-pager -l
 
 
 # ------------------ 1.5 Install Wireguard Client ------------------------
@@ -252,7 +253,7 @@ EOF
 # --------------- 1.7 Start Wireguard Client service ---------------------
 sudo systemctl enable wg-quick@wg0.service
 sudo systemctl restart wg-quick@wg0.service
-sudo systemctl status wg-quick@wg0.service
+sudo systemctl status wg-quick@wg0.service --no-pager -l
 
   
 # --------------- 1.8 Enable IPv4 Gateway Forwarding ---------------------
@@ -302,6 +303,7 @@ ExecStart=/usr/bin/ck-server -c /etc/cloak/cloak-server.json
 WorkingDirectory=/tmp
 StandardOutput=inherit
 StandardError=inherit
+OOMScoreAdjust=-100
 Restart=always
 User=root
   
@@ -314,7 +316,7 @@ EOF
 sudo systemctl daemon-reload
 sudo systemctl enable cloak-server.service
 sudo systemctl restart cloak-server.service
-sudo systemctl status cloak-server.service
+sudo systemctl status cloak-server.service --no-pager -l
 
 
 # ---- 2.5 Allow incomming HTTPS connections on Cloak Server service -----
@@ -351,7 +353,7 @@ EOF
 # ---------------- 2.7 Start Wireguard Server service --------------------
 sudo systemctl enable wg-quick@wg0.service
 sudo systemctl restart wg-quick@wg0.service
-sudo systemctl status wg-quick@wg0.service
+sudo systemctl status wg-quick@wg0.service --no-pager -l
 sudo wg</code></pre>
 `
     document.getElementById("client").innerHTML = subst(client, params);

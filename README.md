@@ -15,6 +15,8 @@ Note: <b>all keys generates on client side (by your internet browser) and not tr
 ## Troubleshooting
 Cloak and Wireguard configs locations:
 | Location | File |
-| -------- | ---- |
+| :------- | :--- |
 | Local Gateway | /etc/cloak/cloak-client.json |
-| Local Gateway | /etc/wireguard/client-wg0.conf |
+| External VM | /etc/cloak/cloak-server.json |
+| Local Gateway | /etc/wireguard/wg0.conf |
+| External VM | /etc/wireguard/wg0.conf |
