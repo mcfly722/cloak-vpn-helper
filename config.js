@@ -233,7 +233,7 @@ sudo apt install -y wireguard openresolv iptables
   
 
 # --------------- 1.6 Create Wireguard Client config ---------------------
-sudo tee /etc/wireguard/client-wg0.conf << EOF
+sudo tee /etc/wireguard/wg0.conf << EOF
 [Interface]
 PrivateKey = :wireguardClientPrivate
 Address = 10.1.1.2/32
