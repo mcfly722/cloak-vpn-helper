@@ -91,7 +91,7 @@ function onChange(key, value){
     if (anyPropertiesHasErrors()) {
         document.getElementById("client").style.userSelect = "none";
         document.getElementById("server").style.userSelect = "none";
-        document.getElementById("configs").innerHTML="Configs copying blocked!<br> Please, fix all highlighted errors and fill required fileds."
+        document.getElementById("configs").innerHTML="Configs copying blocked!<br> Please, fix all highlighted errors and fill required fields."
         document.getElementById("configs").style.color="Red"
     } else {
         document.getElementById("client").style.userSelect = "text";
