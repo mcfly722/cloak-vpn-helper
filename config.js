@@ -245,7 +245,7 @@ PostDown = ip route del :cloakServer/32 via :cloakGateway
   
 [Peer]
 PublicKey = :wireguardServerPublic
-Endpoint = :cloakClient:1984
+Endpoint = 127.0.0.1:1984
 AllowedIPs = 0.0.0.0/0
 EOF
 
