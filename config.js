@@ -180,7 +180,7 @@ function update(){
 
     let client = `
 <pre><code># ------------------ 1.1 Install Cloak Client binary ---------------------
-wget https://github.com/cbeuw/Cloak/releases/download/v2.7.0/ck-client-:clientOS-:clientArch-v2.7.0 -O ck-client
+wget https://github.com/cbeuw/Cloak/releases/download/v2.9.0/ck-client-:clientOS-:clientArch-v2.9.0 -O ck-client
 chmod +x ck-client
 sudo mv ck-client /usr/bin/ck-client
 
@@ -269,7 +269,7 @@ sudo sysctl -p</code></pre>
   
 let server = `
 <pre><code># ----------------- 2.1 Install Cloak Server binary ----------------------
-wget https://github.com/cbeuw/Cloak/releases/download/v2.7.0/ck-server-:serverOS-:serverArch-v2.7.0 -O ck-server
+wget https://github.com/cbeuw/Cloak/releases/download/v2.9.0/ck-server-:serverOS-:serverArch-v2.9.0 -O ck-server
 chmod +x ck-server
 sudo mv ck-server /usr/bin/ck-server
 
