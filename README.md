@@ -1,6 +1,6 @@
 # Cloak + Wireguard VPN Gateway helper
 ![Status: in progress](https://img.shields.io/badge/status-in%20progress-success.svg)
-![version](https://img.shields.io/badge/version-1.0-blue)
+![version](https://img.shields.io/badge/version-1.1-blue)
 [![License: GPL3.0](https://img.shields.io/badge/License-GPL3.0-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.html)
 <br>
 To configure new VPN Gateway, use: https://mcfly722.github.io/cloak-vpn-helper/
