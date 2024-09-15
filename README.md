@@ -13,6 +13,7 @@ This helper simplifies this installation using <a href="https://github.com/cbeuw
 Helper generates required key pairs and gives you final bash scripts for final installation.<br>
 Note: <b>all keys generates on client side (by your internet browser) and not transmitted to any servers! (it is zero trust configurator)</b>
 ## Troubleshooting
+
 Cloak and Wireguard configs locations:
 | Location | File |
 | :------- | :--- |
@@ -20,9 +21,9 @@ Cloak and Wireguard configs locations:
 | Local Gateway | /etc/wireguard/wg0.conf |
 | External VM | /etc/cloak/cloak-server.json |
 | External VM | /etc/wireguard/wg0.conf |
-<br>
-### view logs
 
+
+useful commands:
 ```
 # view journals
 sudo journalctl -u cloak-server.service -f
