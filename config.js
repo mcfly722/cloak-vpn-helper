@@ -17,7 +17,8 @@ var params = {
     clientArch: '',
     serverArch: '',
     clientOS: '',
-    serverOS: ''
+    serverOS: '',
+    clientNTP: ''
 }
 
 var validators = {
@@ -33,7 +34,9 @@ var validators = {
     wireguardServerPrivate: function(value) { return !window.curve25519.generateKeypairForPrivate(value).publicKey.includes("INCORRECT"); },
     wireguardServerPublic:  function(value) { return !value.includes("INCORRECT"); },
     clientArch:             function(value) { return !value.includes("not specified"); },
-    serverArch:             function(value) { return !value.includes("not specified"); }
+    serverArch:             function(value) { return !value.includes("not specified"); },
+    clientNTP:              function(value) { return isValidIPaddress(value); }
+
 }
 
 function isValidIPaddress(ipaddress) {  
@@ -263,7 +266,17 @@ sudo systemctl status wg-quick@wg0.service --no-pager -l
 # --------------- 1.9 Enable IPv4 Gateway Forwarding ---------------------
 echo "net.ipv4.ip_forward=1"          | sudo tee -a /etc/sysctl.conf
 echo "net.ipv4.conf.all.forwarding=1" | sudo tee -a /etc/sysctl.conf
-sudo sysctl -p</code></pre>
+sudo sysctl -p
+
+# --------------- 1.10 Configure NTP client ------------------------------
+sudo tee -a /etc/systemd/timesyncd.conf << EOF
+NTP=:clientNTP
+EOF
+systemctl restart systemd-timesyncd 
+
+sudo ip route add :clientNTP/32 via :cloakGateway
+
+</code></pre>
   
 `
   
